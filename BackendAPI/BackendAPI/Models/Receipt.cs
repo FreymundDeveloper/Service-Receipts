@@ -10,6 +10,8 @@
 
         public Historic Historic { get; set; }
 
+        public Receipt() { }
+
         public Receipt(int id, double cost, double amountCharged, Historic historic)
         {
             Id = id;
