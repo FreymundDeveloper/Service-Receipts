@@ -8,6 +8,7 @@ namespace BackendAPI.Models
         public string? Description { get; set; }
         public DateTime ServiceDate { get; set; }
         public ServiceType ServiceType { get; set; }
+        public int ReceiptId { get; set; }
         public Receipt Receipt { get; set; }
 
         public Historic(int id, string? description, DateTime serviceDate, ServiceType serviceType, Receipt receipt)
