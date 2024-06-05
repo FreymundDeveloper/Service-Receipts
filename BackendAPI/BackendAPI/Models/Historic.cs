@@ -1,21 +1,23 @@
 ﻿using BackendAPI.Models.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace BackendAPI.Models
 {
     public class Historic
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string? Description { get; set; }
         public DateTime ServiceDate { get; set; }
         public ServiceType ServiceType { get; set; }
-        public int ReceiptId { get; set; }
         public Receipt Receipt { get; set; }
 
         public Historic() { }
 
-        public Historic(int id, string? description, DateTime serviceDate, ServiceType serviceType, Receipt receipt)
+        public Historic(string? description, DateTime serviceDate, ServiceType serviceType, Receipt receipt)
         {
-            Id = id;
             Description = description;
             ServiceDate = serviceDate;
             ServiceType = serviceType;
