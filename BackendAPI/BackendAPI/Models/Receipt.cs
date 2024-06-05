@@ -9,10 +9,15 @@ namespace BackendAPI.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:F2}")]
         public double Cost { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:F2}")]
         public double AmountCharged { get; set; }
 
-        public double Profit { get; private set; }
+        [DisplayFormat(DataFormatString = "{0:F2}")]
+        public double Profit => AmountCharged - Cost;
 
         [JsonIgnore]
         public Historic? Historic { get; set; }
@@ -23,12 +28,6 @@ namespace BackendAPI.Models
         {
             Cost = cost;
             AmountCharged = amountCharged;
-            ProfitCalculation();
-        }
-
-        private void ProfitCalculation()
-        {
-            Profit = AmountCharged - Cost;
         }
     }
 }

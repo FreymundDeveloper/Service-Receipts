@@ -3,6 +3,7 @@ using System;
 using BackendAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackendAPI.Migrations
 {
     [DbContext(typeof(BackendAPIContext))]
-    partial class BackendAPIContextModelSnapshot : ModelSnapshot
+    [Migration("20240605234641_FormatAjustment")]
+    partial class FormatAjustment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.6");
@@ -47,6 +50,9 @@ namespace BackendAPI.Migrations
                         .HasColumnType("REAL");
 
                     b.Property<double>("Cost")
+                        .HasColumnType("REAL");
+
+                    b.Property<double>("Profit")
                         .HasColumnType("REAL");
 
                     b.HasKey("Id");
