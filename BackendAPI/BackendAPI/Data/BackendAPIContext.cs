@@ -15,7 +15,7 @@ namespace BackendAPI.Data
             modelBuilder.Entity<Receipt>()
                 .HasOne(r => r.Historic)
                 .WithOne(h => h.Receipt)
-                .HasForeignKey<Receipt>(r => r.Id)
+                .HasForeignKey<Receipt>(r => r.HistoricId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);

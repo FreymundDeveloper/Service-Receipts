@@ -49,7 +49,16 @@ namespace BackendAPI.Migrations
                     b.Property<double>("Cost")
                         .HasColumnType("REAL");
 
+                    b.Property<int>("HistoricId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("Profit")
+                        .HasColumnType("REAL");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("HistoricId")
+                        .IsUnique();
 
                     b.ToTable("Receipts");
                 });
@@ -58,7 +67,7 @@ namespace BackendAPI.Migrations
                 {
                     b.HasOne("BackendAPI.Models.Historic", "Historic")
                         .WithOne("Receipt")
-                        .HasForeignKey("BackendAPI.Models.Receipt", "Id")
+                        .HasForeignKey("BackendAPI.Models.Receipt", "HistoricId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

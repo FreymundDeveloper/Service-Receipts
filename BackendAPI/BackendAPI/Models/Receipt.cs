@@ -17,8 +17,12 @@ namespace BackendAPI.Models
         public double AmountCharged { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:F2}")]
-        public double Profit => AmountCharged - Cost;
+        public double Profit { get => AmountCharged - Cost; set => _ = value; }
 
+        [JsonIgnore]
+        public int HistoricId { get; set; }
+
+        [ForeignKey("HistoricId")]
         [JsonIgnore]
         public Historic? Historic { get; set; }
 
