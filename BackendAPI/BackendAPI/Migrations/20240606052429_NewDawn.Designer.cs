@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackendAPI.Migrations
 {
     [DbContext(typeof(BackendAPIContext))]
-    [Migration("20240605210539_IdAutoImplement")]
-    partial class IdAutoImplement
+    [Migration("20240606052429_NewDawn")]
+    partial class NewDawn
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,10 +52,16 @@ namespace BackendAPI.Migrations
                     b.Property<double>("Cost")
                         .HasColumnType("REAL");
 
+                    b.Property<int>("HistoricId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<double>("Profit")
                         .HasColumnType("REAL");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("HistoricId")
+                        .IsUnique();
 
                     b.ToTable("Receipts");
                 });
@@ -64,7 +70,7 @@ namespace BackendAPI.Migrations
                 {
                     b.HasOne("BackendAPI.Models.Historic", "Historic")
                         .WithOne("Receipt")
-                        .HasForeignKey("BackendAPI.Models.Receipt", "Id")
+                        .HasForeignKey("BackendAPI.Models.Receipt", "HistoricId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

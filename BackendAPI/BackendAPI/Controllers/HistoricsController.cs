@@ -39,8 +39,23 @@ namespace BackendAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutHistoric(int id, Historic historic)
         {
-            historic.Id = id;
-            _context.Entry(historic).State = EntityState.Modified;
+            var existingHistoric = await _context.Historicals.Include(h => h.Receipt).FirstOrDefaultAsync(h => h.Id == id);
+
+            if (existingHistoric == null) return NotFound();
+
+            existingHistoric.Description = historic.Description;
+            existingHistoric.ServiceDate = historic.ServiceDate;
+            existingHistoric.ServiceType = historic.ServiceType;
+
+            if (existingHistoric.Receipt != null && historic.Receipt != null)
+            {
+                existingHistoric.Receipt.Cost = historic.Receipt.Cost;
+                existingHistoric.Receipt.AmountCharged = historic.Receipt.AmountCharged;
+            }
+
+            _context.Entry(existingHistoric).State = EntityState.Modified;
+
+            if (existingHistoric.Receipt != null) _context.Entry(existingHistoric.Receipt).State = EntityState.Modified;
 
             try
             {
