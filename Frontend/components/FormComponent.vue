@@ -15,18 +15,18 @@ export default {
     return {
       formData: {
         description: '',
-        serviceDate: null,
-        serviceType: null,
+        serviceDate: new Date(),
+        serviceType: 0,
         receipt: {
-          cost: null,
-          amountCharged: null,
+          cost: 0,
+          amountCharged: 0,
         },
       },
     };
   },
   methods: {
     submitForm() {
-      this.$axios.post('/Api/Historic', this.formData)
+      this.$axios.post('https://localhost:7136/Api/Historic', this.formData)
         .then(response => {
           console.log('Form submitted:', response.data);
         })
