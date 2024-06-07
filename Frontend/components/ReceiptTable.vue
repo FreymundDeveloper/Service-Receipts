@@ -1,7 +1,11 @@
 <template>
   <v-card>
     <v-card-title>Receipt</v-card-title>
-    <v-data-table :headers="headers" :items="items"></v-data-table>
+    <v-data-table :headers="headers" :items="items">
+      <template v-slot:[`item.actions`]="{ item }">
+        <v-icon color="error" @click="deleteItem(item.id)">mdi-delete</v-icon>
+      </template>
+    </v-data-table>
   </v-card>
 </template>
 
@@ -13,7 +17,8 @@ export default {
         { text: 'ID', value: 'id' },
         { text: 'Cost (US$)', value: 'cost' },
         { text: 'Amount Charged (US$)', value: 'amountCharged' },
-        { text: 'Profit (US$)', value: 'profit' }
+        { text: 'Profit (US$)', value: 'profit' },
+        { text: 'Actions', value: 'actions', sortable: false }
       ],
       items: [],
     };
@@ -41,6 +46,15 @@ export default {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       });
+    },
+    deleteItem(itemId) {
+      this.$axios.delete(`https://localhost:7136/Api/Historic/${itemId}`)
+        .then(() => {
+          this.fetchReceipts();
+        })
+        .catch(error => {
+          console.error('Error deleting item:', error);
+        });
     },
   },
 };
