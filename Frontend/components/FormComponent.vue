@@ -2,7 +2,7 @@
   <form @submit.prevent="submitForm">
     <v-text-field v-model="formData.description" label="Description" required></v-text-field>
     <v-text-field v-model="formData.serviceDate" label="Service Date" required></v-text-field>
-    <v-text-field v-model="formData.serviceType" label="service Type" required></v-text-field>
+    <v-select v-model="formData.serviceType" :items="serviceTypesItems" :rules="[v => !!v || 'Item is required']" label="Service Type" required ></v-select>
     <v-text-field v-model="formData.receipt.cost" label="Cost" required></v-text-field>
     <v-text-field v-model="formData.receipt.amountCharged" label="Amount Charged" required></v-text-field>
     <v-btn type="submit" color="primary">Enviar</v-btn>
@@ -16,12 +16,17 @@ export default {
       formData: {
         description: '',
         serviceDate: new Date(),
-        serviceType: 0,
+        serviceType: null,
         receipt: {
           cost: 0,
           amountCharged: 0,
         },
       },
+      serviceTypesItems: [
+        { text: 'Cleaning', value: 0 },
+        { text: 'Software Update', value: 1 },
+        { text: 'Hardware Replacement', value: 2 },
+      ],
     };
   },
   methods: {
