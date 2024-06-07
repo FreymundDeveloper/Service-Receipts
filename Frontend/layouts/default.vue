@@ -1,6 +1,7 @@
 <template>
   <v-app dark>
     <v-app-bar :clipped-left="clipped" fixed app>
+      <v-spacer></v-spacer>
       <v-btn text @click="$root.$emit('changeTable', 1)">Historic</v-btn>
       <v-btn text @click="$root.$emit('changeTable', 2)">Receipt</v-btn>
     </v-app-bar>

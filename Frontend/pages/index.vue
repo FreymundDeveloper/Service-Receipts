@@ -3,20 +3,20 @@
     <v-layout row wrap>
       <v-flex xs12 md6>
         <v-card>
+          <v-card-title>
+            New Registration
+          </v-card-title>
           <v-card-text>
-            <div v-if="showTableOption === 1"><HistoricTable /></div>
-            <div v-else><ReceiptTable /></div>
+            <FormComponent />
           </v-card-text>
         </v-card>
       </v-flex>
 
       <v-flex xs12 md6>
         <v-card>
-          <v-card-title>
-            New Registration
-          </v-card-title>
           <v-card-text>
-            <FormComponent />
+            <div v-if="showTableOption === 1"><HistoricTable /></div>
+            <div v-else><ReceiptTable /></div>
           </v-card-text>
         </v-card>
       </v-flex>
