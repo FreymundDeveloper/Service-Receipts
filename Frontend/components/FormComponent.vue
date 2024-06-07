@@ -39,7 +39,7 @@ export default {
   },
   computed: {
     serviceTypeRules() {
-      return [v => !!v || 'Item is required'];
+      return [v => (v !== null && v !== undefined) || 'Item is required'];
     },
     descriptionRules() {
       return [v => !!v || 'Item is required'];
