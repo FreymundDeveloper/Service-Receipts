@@ -27,7 +27,6 @@ export default {
       this.$axios.get('https://localhost:7136/Api/Historic')
         .then(response => {
           this.items = response.data;
-          console.log(response.data)
         })
         .catch(error => {
           console.error('Error fetching Historic:', error);

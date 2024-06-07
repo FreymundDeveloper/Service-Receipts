@@ -71,6 +71,7 @@ export default {
       this.$axios.post('https://localhost:7136/Api/Historic', this.formData)
         .then(response => {
           console.log('Form submitted:', response.data);
+          window.location.reload();
         })
         .catch(error => {
           console.error('Error submitting form:', error);
