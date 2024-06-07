@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-layout row wrap>
-      <v-flex xs12 md6>
+      <v-flex xs12 md6 class="pa-2">
         <v-card>
           <v-card-title>
             New Registration
@@ -12,7 +12,7 @@
         </v-card>
       </v-flex>
 
-      <v-flex xs12 md6>
+      <v-flex xs12 md6 class="pa-2">
         <v-card>
           <v-card-text>
             <div v-if="showTableOption === 1"><HistoricTable /></div>
