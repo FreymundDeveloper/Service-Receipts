@@ -12,7 +12,7 @@
     </v-menu>
     <v-text-field v-model.number="formData.receipt.cost" label="Cost (US$)" required :rules="costRules" @focus="clearCost"></v-text-field>
     <v-text-field v-model.number="formData.receipt.amountCharged" label="Amount Charged (US$)" required :rules="amountChargedRules" @focus="clearAmountCharged"></v-text-field>
-    <v-btn type="submit" color="primary">Enviar</v-btn>
+    <v-btn type="submit" color="primary" :disabled="!formIsValid">Submit</v-btn>
   </form>
 </template>
 
@@ -55,6 +55,15 @@ export default {
         v => !!v || 'Item is required',
         v => /^[0-9]+(\.[0-9]{1,2})?$/.test(v) || 'Enter a valid number'
       ];
+    },
+    formIsValid() {
+      return (
+        this.formData.serviceType !== null &&
+        this.formData.description.trim() !== '' &&
+        this.formData.serviceDate.trim() !== '' &&
+        this.formData.receipt.cost !== null &&
+        this.formData.receipt.amountCharged !== null
+      );
     }
   },
   methods: {
