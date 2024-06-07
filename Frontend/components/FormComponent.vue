@@ -5,7 +5,7 @@
       <v-btn value="edit">Edit Mode</v-btn>
     </v-btn-toggle>
 
-    <v-text-field v-model="editId" v-if="mode === 'edit'" label="ID" :rules="numberTypeRules" required></v-text-field>
+    <v-text-field v-model="editId" v-if="mode === 'edit'" label="Historic ID" :rules="numberTypeRules" required></v-text-field>
 
     <v-select v-model="formData.serviceType" :items="serviceTypesItems" :rules="serviceTypeRules" label="Service Type" required ></v-select>
     <v-textarea v-model="formData.description" :rules="descriptionRules" label="Description" required></v-textarea>
@@ -17,7 +17,7 @@
       </template>
       <v-date-picker v-model="formData.serviceDate" no-title scrollable @input="menu = false"></v-date-picker>
     </v-menu>
-    <v-text-field v-model.number="formData.receipt.cost" label="Cost (US$)" required :rules="costRules" @focus="numberTypeRules"></v-text-field>
+    <v-text-field v-model.number="formData.receipt.cost" label="Cost (US$)" required :rules="numberTypeRules" @focus="clearCost"></v-text-field>
     <v-text-field v-model.number="formData.receipt.amountCharged" label="Amount Charged (US$)" required :rules="numberTypeRules" @focus="clearAmountCharged"></v-text-field>
 
     <v-btn type="submit" color="primary" :disabled="!formIsValid">{{ mode === 'register' ? 'Register' : 'Edit' }}</v-btn>
@@ -60,26 +60,18 @@ export default {
     descriptionRules() {
       return [v => !!v || 'Item is required'];
     },
-    costRules() {
-      return [
-        v => !!v || 'Item is required',
-        v => /^[0-9]+(\.[0-9]{1,2})?$/.test(v) || 'Enter a valid number'
-      ];
-    },
-    amountChargedRules() {
-      return [
-        v => !!v || 'Item is required',
-        v => /^[0-9]+(\.[0-9]{1,2})?$/.test(v) || 'Enter a valid number'
-      ];
-    },
     formIsValid() {
+      const isValidCost = this.formData.receipt.cost !== null && /^\d+(\.\d{1,2})?$/.test(this.formData.receipt.cost);
+      const isValidAmountCharged = this.formData.receipt.amountCharged !== null && /^\d+(\.\d{1,2})?$/.test(this.formData.receipt.amountCharged);
+      const isValidId = this.mode === 'register' || (!!this.editId && /^\d+$/.test(this.editId.trim()));
+
       return (
         this.formData.serviceType !== null &&
         this.formData.description.trim() !== '' &&
         this.formData.serviceDate.trim() !== '' &&
-        this.formData.receipt.cost !== null &&
-        this.formData.receipt.amountCharged !== null &&
-        (this.mode === 'register' || (!!this.editId && this.editId.trim() !== ''))
+        isValidCost &&
+        isValidAmountCharged &&
+        isValidId
       );
     }
   },
