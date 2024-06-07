@@ -1,4 +1,3 @@
-<!-- components/HistoricTable.vue -->
 <template>
   <v-card>
     <v-card-title>Historic</v-card-title>

@@ -1,7 +1,6 @@
-<!-- components/ReceiptTable.vue -->
 <template>
   <v-card>
-    <v-card-title>Recibo</v-card-title>
+    <v-card-title>Receipt</v-card-title>
     <v-data-table :headers="headers" :items="items"></v-data-table>
   </v-card>
 </template>
@@ -24,7 +23,7 @@ export default {
   },
   methods: {
     fetchReceipts() {
-      this.$axios.get('/Api/Receipts')
+      this.$axios.get('https://localhost:7136/Api/Receipt')
         .then(response => {
           this.items = response.data;
         })
