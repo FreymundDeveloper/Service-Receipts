@@ -4,7 +4,7 @@
       <v-flex xs12 md5 class="pa-2">
         <v-card>
           <v-card-title>
-            New Registration
+            Registration Form
           </v-card-title>
           <v-card-text>
             <FormComponent />

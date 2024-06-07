@@ -1,5 +1,12 @@
 <template>
   <form @submit.prevent="submitForm">
+    <v-btn-toggle v-model="mode" class="mb-4">
+      <v-btn value="register">Registration Mode</v-btn>
+      <v-btn value="edit">Edit Mode</v-btn>
+    </v-btn-toggle>
+
+    <v-text-field v-model="editId" v-if="mode === 'edit'" label="ID" :rules="numberTypeRules" required></v-text-field>
+
     <v-select v-model="formData.serviceType" :items="serviceTypesItems" :rules="serviceTypeRules" label="Service Type" required ></v-select>
     <v-textarea v-model="formData.description" :rules="descriptionRules" label="Description" required></v-textarea>
      <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :nudge-right="40" transition="scale-transition"
@@ -10,9 +17,10 @@
       </template>
       <v-date-picker v-model="formData.serviceDate" no-title scrollable @input="menu = false"></v-date-picker>
     </v-menu>
-    <v-text-field v-model.number="formData.receipt.cost" label="Cost (US$)" required :rules="costRules" @focus="clearCost"></v-text-field>
-    <v-text-field v-model.number="formData.receipt.amountCharged" label="Amount Charged (US$)" required :rules="amountChargedRules" @focus="clearAmountCharged"></v-text-field>
-    <v-btn type="submit" color="primary" :disabled="!formIsValid">Submit</v-btn>
+    <v-text-field v-model.number="formData.receipt.cost" label="Cost (US$)" required :rules="costRules" @focus="numberTypeRules"></v-text-field>
+    <v-text-field v-model.number="formData.receipt.amountCharged" label="Amount Charged (US$)" required :rules="numberTypeRules" @focus="clearAmountCharged"></v-text-field>
+
+    <v-btn type="submit" color="primary" :disabled="!formIsValid">{{ mode === 'register' ? 'Register' : 'Edit' }}</v-btn>
   </form>
 </template>
 
@@ -21,6 +29,8 @@ export default {
   data() {
     return {
       menu: false,
+      mode: 'register',
+      editId: '',
       formData: {
         description: '',
         serviceDate: new Date().toISOString().slice(0, 10),
@@ -38,6 +48,12 @@ export default {
     };
   },
   computed: {
+    numberTypeRules() {
+      return [
+        v => !!v || 'Item is required',
+        v => /^[0-9]+(\.[0-9]{1,2})?$/.test(v) || 'Enter a valid number'
+      ];
+    },
     serviceTypeRules() {
       return [v => (v !== null && v !== undefined) || 'Item is required'];
     },
@@ -62,19 +78,22 @@ export default {
         this.formData.description.trim() !== '' &&
         this.formData.serviceDate.trim() !== '' &&
         this.formData.receipt.cost !== null &&
-        this.formData.receipt.amountCharged !== null
+        this.formData.receipt.amountCharged !== null &&
+        (this.mode === 'register' || (!!this.editId && this.editId.trim() !== ''))
       );
     }
   },
   methods: {
     submitForm() {
-      this.$axios.post('https://localhost:7136/Api/Historic', this.formData)
+      const url = this.mode === 'register' ? 'https://localhost:7136/Api/Historic' : `https://localhost:7136/Api/Historic/${this.editId}`;
+      const method = this.mode === 'register' ? 'post' : 'put';
+      this.$axios[method](url, this.formData)
         .then(response => {
-          console.log('Form submitted:', response.data);
+          console.log(this.mode === 'register' ? 'Formulário registrado:' : 'Formulário editado:', response.data);
           window.location.reload();
         })
         .catch(error => {
-          console.error('Error submitting form:', error);
+          console.error('Erro ao enviar formulário:', error);
         });
     },
     clearCost() {
@@ -86,7 +105,7 @@ export default {
       if (this.formData.receipt.amountCharged === 0) {
         this.formData.receipt.amountCharged = null;
       }
-    }
+    },
   },
 };
 </script>
