@@ -7,7 +7,7 @@ export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s - Frontend',
-    title: 'Frontend',
+    title: 'Service Receipts',
     htmlAttrs: {
       lang: 'en'
     },
