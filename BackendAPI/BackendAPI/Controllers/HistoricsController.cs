@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace BackendAPI.Controllers
 {
@@ -21,12 +22,20 @@ namespace BackendAPI.Controllers
         }
 
         [HttpGet]
+        [SwaggerOperation(Summary = "Get all Historic Data.")]
+        [SwaggerResponse(200, "OK", typeof(Historic))]
+        [SwaggerResponse(500, "Server Error.")]
         public async Task<ActionResult<IEnumerable<Historic>>> GetHistorics()
         {
             return await _context.Historicals.Include(h => h.Receipt).ToListAsync();
         }
 
         [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Get One Historic Data.")]
+        [SwaggerResponse(200, "OK", typeof(Historic))]
+        [SwaggerResponse(400, "The param id cannot be empty.")]
+        [SwaggerResponse(404, "Data not found.")]
+        [SwaggerResponse(500, "Server Error.")]
         public async Task<ActionResult<Historic>> GetHistoric(int id)
         {
             var historic = await _context.Historicals.Include(h => h.Receipt).FirstOrDefaultAsync(h => h.Id == id);
@@ -37,6 +46,10 @@ namespace BackendAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [SwaggerOperation(Summary = "Edit One Historic Data - REMOVE THE IDs IN THE BODY.")]
+        [SwaggerResponse(204, "Operation carried out successfully.")]
+        [SwaggerResponse(400, "The param id cannot be empty or some field have a invalid format.")]
+        [SwaggerResponse(500, "Server Error.")]
         public async Task<IActionResult> PutHistoric(int id, Historic historic)
         {
             var existingHistoric = await _context.Historicals.Include(h => h.Receipt).FirstOrDefaultAsync(h => h.Id == id);
@@ -71,6 +84,10 @@ namespace BackendAPI.Controllers
         }
 
         [HttpPost]
+        [SwaggerOperation(Summary = "Create One Historic Data - REMOVE THE IDs IN THE BODY.")]
+        [SwaggerResponse(201, "Data Created", typeof(Historic))]
+        [SwaggerResponse(400, "Some field have a invalid format.")]
+        [SwaggerResponse(500, "Server Error.")]
         public async Task<ActionResult<Historic>> PostHistoric(Historic historic)
         {
             _context.Historicals.Add(historic);
@@ -80,6 +97,10 @@ namespace BackendAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Delete One Historic Data.")]
+        [SwaggerResponse(201, "Data Deleted")]
+        [SwaggerResponse(400, "The param id cannot be empty.")]
+        [SwaggerResponse(500, "Server Error.")]
         public async Task<IActionResult> DeleteHistoric(int id)
         {
             var historic = await _context.Historicals.FindAsync(id);

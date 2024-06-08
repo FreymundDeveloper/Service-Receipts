@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace BackendAPI.Controllers
 {
@@ -21,6 +22,9 @@ namespace BackendAPI.Controllers
         }
 
         [HttpGet]
+        [SwaggerOperation(Summary = "Get all Receipt Data.")]
+        [SwaggerResponse(200, "OK", typeof(Historic))]
+        [SwaggerResponse(500, "Server Error.")]
         public async Task<ActionResult<IEnumerable<Receipt>>> GetReceipts()
         {
             return await _context.Receipts.ToListAsync();
