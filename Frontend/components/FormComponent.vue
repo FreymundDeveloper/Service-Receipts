@@ -118,11 +118,18 @@ export default {
     setFormData(item) {
       this.editId = item.id;
       this.formData.description = item.description;
-      this.formData.serviceDate = item.serviceDate;
+      this.formData.serviceDate = this.formatDate(item.serviceDate);
       this.formData.serviceType = item.serviceType;
       this.formData.receipt.cost = parseFloat(item.receipt.cost);
       this.formData.receipt.amountCharged = parseFloat(item.receipt.amountCharged);
       this.mode = 'edit';
+    },
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
     },
     fetchHistoricItem(itemId) {
       this.$axios.get(`https://localhost:7136/Api/Historic/${itemId}`)
