@@ -5,7 +5,7 @@
       <v-btn value="edit">Edit Mode</v-btn>
     </v-btn-toggle>
 
-    <v-text-field v-model="editId" v-if="mode === 'edit'" label="Historic ID" :rules="numberTypeRules" required></v-text-field>
+    <v-text-field v-model="editId" v-if="mode === 'edit'" type="number" label="Historic ID" :rules="numberTypeRules" required></v-text-field>
 
     <v-select v-model="formData.serviceType" :items="serviceTypesItems" :rules="serviceTypeRules" label="Service Type" required></v-select>
     <v-textarea v-model="formData.description" :rules="descriptionRules" label="Description" required></v-textarea>
@@ -17,8 +17,8 @@
       </template>
       <v-date-picker v-model="formData.serviceDate" no-title scrollable @input="menu = false"></v-date-picker>
     </v-menu>
-    <v-text-field v-model.number="formData.receipt.cost" label="Cost (US$)" required :rules="numberTypeRules" @focus="clearCost"></v-text-field>
-    <v-text-field v-model.number="formData.receipt.amountCharged" label="Amount Charged (US$)" required :rules="numberTypeRules" @focus="clearAmountCharged"></v-text-field>
+    <v-text-field v-model.number="formData.receipt.cost" type="number" step="0.01" label="Cost (US$)" required :rules="numberTypeRules" @focus="clearCost"></v-text-field>
+    <v-text-field v-model.number="formData.receipt.amountCharged" type="number" step="0.01" label="Amount Charged (US$)" required :rules="numberTypeRules" @focus="clearAmountCharged"></v-text-field>
 
     <v-btn type="submit" color="primary" :disabled="!formIsValid">{{ mode === 'register' ? 'Register' : 'Edit' }}</v-btn>
   </form>
@@ -143,3 +143,11 @@ export default {
   }
 };
 </script>
+
+<style>
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+</style>
