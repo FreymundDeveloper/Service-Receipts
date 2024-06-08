@@ -7,7 +7,7 @@
             Registration Form
           </v-card-title>
           <v-card-text>
-            <FormComponent />
+            <FormComponent :editItemId="editItemId" />
           </v-card-text>
         </v-card>
       </v-flex>
@@ -16,7 +16,7 @@
         <v-card>
           <v-card-text>
             <div v-if="showTableOption === 1"><HistoricTable /></div>
-            <div v-else><ReceiptTable /></div>
+            <div v-else><ReceiptTable @edit-item="handleEditItem" /></div>
           </v-card-text>
         </v-card>
       </v-flex>
@@ -35,6 +35,7 @@ export default {
   data() {
     return {
       showTableOption: 1,
+      editItemId: null,
     };
   },
   mounted() {
@@ -46,6 +47,9 @@ export default {
   methods: {
     handleTableChange(option) {
       this.showTableOption = option;
+    },
+    handleEditItem(itemId) {
+      this.editItemId = itemId;
     }
   }
 }

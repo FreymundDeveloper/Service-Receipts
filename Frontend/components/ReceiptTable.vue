@@ -3,6 +3,7 @@
     <v-card-title>Receipt</v-card-title>
     <v-data-table :headers="headers" :items="items">
       <template v-slot:[`item.actions`]="{ item }">
+        <v-icon color="primary" @click="editItem(item.id)">mdi-pencil</v-icon>
         <v-icon color="error" @click="deleteItem(item.id)">mdi-delete</v-icon>
       </template>
     </v-data-table>
@@ -55,6 +56,9 @@ export default {
         .catch(error => {
           console.error('Error deleting item:', error);
         });
+    },
+    editItem(itemId) {
+      this.$emit('edit-item', itemId);
     },
   },
 };

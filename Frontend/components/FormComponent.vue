@@ -7,10 +7,10 @@
 
     <v-text-field v-model="editId" v-if="mode === 'edit'" label="Historic ID" :rules="numberTypeRules" required></v-text-field>
 
-    <v-select v-model="formData.serviceType" :items="serviceTypesItems" :rules="serviceTypeRules" label="Service Type" required ></v-select>
+    <v-select v-model="formData.serviceType" :items="serviceTypesItems" :rules="serviceTypeRules" label="Service Type" required></v-select>
     <v-textarea v-model="formData.description" :rules="descriptionRules" label="Description" required></v-textarea>
-     <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :nudge-right="40" transition="scale-transition"
-        offset-y min-width="auto">
+    <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :nudge-right="40" transition="scale-transition"
+      offset-y min-width="auto">
       <template v-slot:activator="{ on, attrs }">
         <v-text-field v-model="formData.serviceDate" label="Service Date" prepend-icon="mdi-calendar"
           readonly v-bind="attrs" v-on="on" required></v-text-field>
@@ -26,6 +26,23 @@
 
 <script>
 export default {
+  props: {
+    editItemId: {
+      type: Number,
+      default: null,
+    }
+  },
+  watch: {
+  editItemId(newId) {
+    if (newId != null) {
+      this.editId = newId;
+      this.fetchHistoricItem(newId);
+      this.mode = 'edit';
+    } else {
+      this.editId = '';
+    }
+  }
+},
   data() {
     return {
       menu: false,
@@ -63,7 +80,7 @@ export default {
     formIsValid() {
       const isValidCost = this.formData.receipt.cost !== null && /^\d+(\.\d{1,2})?$/.test(this.formData.receipt.cost);
       const isValidAmountCharged = this.formData.receipt.amountCharged !== null && /^\d+(\.\d{1,2})?$/.test(this.formData.receipt.amountCharged);
-      const isValidId = this.mode === 'register' || (!!this.editId && /^\d+$/.test(this.editId.trim()));
+      const isValidId = this.mode === 'register' || (!!this.editId && /^\d+$/.test(String(this.editId).trim()));
 
       return (
         this.formData.serviceType !== null &&
@@ -81,11 +98,11 @@ export default {
       const method = this.mode === 'register' ? 'post' : 'put';
       this.$axios[method](url, this.formData)
         .then(response => {
-          console.log(this.mode === 'register' ? 'Formulário registrado:' : 'Formulário editado:', response.data);
+          console.log(this.mode === 'register' ? 'Registered form:' : 'Edited form:', response.data);
           window.location.reload();
         })
         .catch(error => {
-          console.error('Erro ao enviar formulário:', error);
+          console.error('Error submitting form:', error);
         });
     },
     clearCost() {
@@ -98,6 +115,24 @@ export default {
         this.formData.receipt.amountCharged = null;
       }
     },
-  },
+    setFormData(item) {
+      this.editId = item.id;
+      this.formData.description = item.description;
+      this.formData.serviceDate = item.serviceDate;
+      this.formData.serviceType = item.serviceType;
+      this.formData.receipt.cost = parseFloat(item.receipt.cost);
+      this.formData.receipt.amountCharged = parseFloat(item.receipt.amountCharged);
+      this.mode = 'edit';
+    },
+    fetchHistoricItem(itemId) {
+      this.$axios.get(`https://localhost:7136/Api/Historic/${itemId}`)
+        .then(response => {
+          this.setFormData(response.data);
+        })
+        .catch(error => {
+          console.error('Error when searching for item:', error);
+        });
+    }
+  }
 };
 </script>
